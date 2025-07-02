@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  qlib-trading:
+    build: .
+    container_name: qlib-production-trading
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # Mount logs directory for persistence
+      - ./logs:/app/logs
+      # Mount data directory for persistence
+      - ./data:/app/data
+      # Mount config directory for easy updates
+      - ./config:/app/config
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import qlib.production; print('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - qlib-network
+
+  # Optional: Add a monitoring service
+  monitoring:
+    image: grafana/grafana:latest
+    container_name: qlib-monitoring
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - qlib-network
+    depends_on:
+      - qlib-trading
+
+  # Optional: Add a database for storing trading data
+  database:
+    image: postgres:13
+    container_name: qlib-database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: qlib_trading
+      POSTGRES_USER: ${DB_USERNAME:-qlib_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-qlib_password}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - qlib-network
+
+volumes:
+  grafana-storage:
+  postgres-data:
+
+networks:
+  qlib-network:
+    driver: bridge 

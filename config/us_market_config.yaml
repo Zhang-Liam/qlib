@@ -1,0 +1,25 @@
+data:
+  provider_uri: ~/.qlib/qlib_data/us_data
+  market: US
+  benchmark: SP500
+  start_time: 2010-01-01
+  end_time: 2099-12-31
+  freq: 'day'
+  instruments: 'all'
+
+trading:
+  broker: alpaca
+  api_key: YOUR_API_KEY
+  secret_key: YOUR_SECRET_KEY
+  paper_trading: true
+
+risk_management:
+  max_position_size: 0.1
+  max_drawdown: 0.1
+  max_daily_loss: 0.05
+
+backtest:
+  initial_cash: 1000000
+  commission: 0.001
+  slippage: 0.001
+  cost_adjustment: true

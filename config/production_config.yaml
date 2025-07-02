@@ -1,0 +1,181 @@
+# Production Configuration for Qlib Trading System (Docker)
+# This file configures all production components for US market trading
+
+# Broker Configuration
+broker:
+  provider: "mock"  # Options: ibkr, alpaca, mock
+  ibkr:
+    host: "127.0.0.1"
+    port: 7497  # 7497 for TWS, 4001 for Gateway
+    client_id: 1
+    paper_trading: true
+  alpaca:
+    api_key: "${ALPACA_API_KEY}"  # Set via environment variable
+    secret_key: "${ALPACA_SECRET_KEY}"
+    base_url: "https://paper-api.alpaca.markets"  # Use live URL for production
+    paper_trading: true
+
+# Risk Management Configuration
+risk:
+  # Position size limits
+  max_position_size: 0.05  # 5% of portfolio per position
+  max_total_positions: 0.80  # 80% of portfolio in positions
+  
+  # Loss limits
+  max_daily_loss: 0.02  # 2% daily loss limit
+  max_total_loss: 0.10  # 10% total loss limit
+  
+  # Exposure limits
+  max_sector_exposure: 0.30  # 30% max exposure to any sector
+  max_single_stock_exposure: 0.10  # 10% max exposure to single stock
+  
+  # Leverage limits
+  max_leverage: 1.5  # 1.5x leverage maximum
+  
+  # Volatility limits
+  max_volatility: 0.25  # 25% annualized volatility limit
+  
+  # Trading limits
+  max_trades_per_day: 50
+  min_trade_interval: 60  # seconds between trades
+
+# Live Data Configuration
+data:
+  provider: "mock"  # Options: mock, ibkr, alpaca
+  mock:
+    volatility: 0.01  # 1% price volatility for mock data
+  ibkr:
+    host: "127.0.0.1"
+    port: 7497
+    client_id: 2  # Different client ID from broker
+    timeout: 5  # seconds to wait for market data
+  alpaca:
+    api_key: "${ALPACA_API_KEY}"
+    secret_key: "${ALPACA_SECRET_KEY}"
+    base_url: "https://paper-api.alpaca.markets"
+
+# Trading Configuration
+trading:
+  # Enable/disable trading
+  enable_trading: false  # Set to true for live trading
+  
+  # Symbols to trade
+  symbols:
+    - "AAPL"
+    - "GOOGL"
+    - "MSFT"
+    - "SPY"
+    - "QQQ"
+  
+  # Trading strategy parameters
+  strategy:
+    type: "momentum"  # Options: momentum, mean_reversion, ml_signal
+    lookback_period: 20  # days
+    signal_threshold: 0.02  # 2% threshold for signals
+    
+  # Order management
+  order:
+    default_quantity: 100  # shares
+    order_type: "MARKET"  # MARKET, LIMIT, STOP
+    time_in_force: "DAY"  # DAY, GTC, IOC
+    
+  # Portfolio management
+  portfolio:
+    rebalance_frequency: "daily"  # daily, weekly, monthly
+    target_volatility: 0.15  # 15% target volatility
+    max_drawdown: 0.10  # 10% maximum drawdown
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "/app/logs/production.log"  # Docker path
+  max_file_size: "10MB"
+  backup_count: 5
+  
+# Performance Monitoring
+monitoring:
+  enabled: true
+  metrics:
+    - "returns"
+    - "sharpe_ratio"
+    - "max_drawdown"
+    - "volatility"
+    - "trade_count"
+    - "win_rate"
+  
+  alerts:
+    email: "${ALERT_EMAIL}"
+    slack_webhook: "${SLACK_WEBHOOK_URL}"
+    
+    thresholds:
+      daily_loss: 0.02  # Alert if daily loss > 2%
+      drawdown: 0.05    # Alert if drawdown > 5%
+      volatility: 0.30  # Alert if volatility > 30%
+
+# Database Configuration (for storing trades and performance)
+database:
+  type: "sqlite"  # Options: sqlite, postgresql, mysql
+  sqlite:
+    path: "/app/data/trading.db"  # Docker path
+  postgresql:
+    host: "database"  # Docker service name
+    port: 5432
+    database: "qlib_trading"
+    username: "${DB_USERNAME}"
+    password: "${DB_PASSWORD}"
+
+# Model Configuration (for ML-based strategies)
+model:
+  # Path to trained model
+  model_path: "/app/data/latest_model.pkl"  # Docker path
+  
+  # Feature configuration
+  features:
+    - "close"
+    - "volume"
+    - "returns_1d"
+    - "returns_5d"
+    - "returns_20d"
+    - "volatility_20d"
+    - "rsi_14"
+    - "macd"
+    
+  # Prediction configuration
+  prediction:
+    horizon: 1  # days ahead
+    confidence_threshold: 0.6  # minimum confidence for trades
+    update_frequency: "daily"  # how often to update predictions
+
+# Market Hours (US Eastern Time)
+market_hours:
+  start: "09:30"
+  end: "16:00"
+  timezone: "US/Eastern"
+  
+  # Pre-market and after-hours
+  pre_market_start: "04:00"
+  after_hours_end: "20:00"
+  
+  # Trading days (Monday = 0, Sunday = 6)
+  trading_days: [0, 1, 2, 3, 4]  # Monday to Friday
+
+# Emergency Configuration
+emergency:
+  # Emergency stop conditions
+  stop_conditions:
+    - "max_daily_loss_exceeded"
+    - "max_drawdown_exceeded"
+    - "connection_lost"
+    - "data_feed_failure"
+    
+  # Emergency actions
+  actions:
+    - "close_all_positions"
+    - "disable_trading"
+    - "send_alert"
+    - "log_incident"
+    
+  # Recovery procedures
+  recovery:
+    manual_approval_required: true
+    cooldown_period: 3600  # 1 hour before restart 

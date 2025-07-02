@@ -1,31 +1,36 @@
-FROM continuumio/miniconda3:latest
+FROM python:3.10-slim
 
-WORKDIR /qlib
+# Set working directory
+WORKDIR /app
 
-COPY . .
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && \
-    apt-get install -y build-essential
+# Copy requirements and install Python dependencies
+COPY examples/production_requirements.txt .
+RUN pip install --no-cache-dir -r production_requirements.txt
 
-RUN conda create --name qlib_env python=3.8 -y
-RUN echo "conda activate qlib_env" >> ~/.bashrc
-ENV PATH /opt/conda/envs/qlib_env/bin:$PATH
+# Copy the qlib package
+COPY qlib/ ./qlib/
 
-RUN python -m pip install --upgrade pip
+# Copy configuration files
+COPY config/ ./config/
+COPY examples/ ./examples/
 
-RUN python -m pip install numpy==1.23.5
-RUN python -m pip install pandas==1.5.3
-RUN python -m pip install importlib-metadata==5.2.0
-RUN python -m pip install "cloudpickle<3"
-RUN python -m pip install scikit-learn==1.3.2
+# Create directories for logs and data
+RUN mkdir -p /app/logs /app/data
 
-RUN python -m pip install cython packaging tables matplotlib statsmodels
-RUN python -m pip install pybind11 cvxpy
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+ENV BROKER_TYPE=mock
 
-ARG IS_STABLE="yes"
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import qlib.production; print('Health check passed')" || exit 1
 
-RUN if [ "$IS_STABLE" = "yes" ]; then \
-        python -m pip install pyqlib; \
-    else \
-        python setup.py install; \
-    fi
+# Default command: run the production workflow
+CMD ["python", "-m", "qlib.production.workflow", "--config", "config/production_config.yaml", "--continuous"]
