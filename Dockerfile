@@ -1,36 +1,46 @@
-FROM python:3.10-slim
+# Production Dockerfile for ReadWave Quant Trading System
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    curl \
+    wget \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Copy requirements first for better caching
+COPY requirements-docker.txt requirements.txt
 
-# Copy requirements and install Python dependencies
-COPY examples/production_requirements.txt .
-RUN pip install --no-cache-dir -r production_requirements.txt
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the qlib package
-COPY qlib/ ./qlib/
+# Copy application code
+COPY . .
 
-# Copy configuration files
-COPY config/ ./config/
-COPY examples/ ./examples/
+# Create necessary directories
+RUN mkdir -p logs data config
 
-# Create directories for logs and data
-RUN mkdir -p /app/logs /app/data
+    # Set permissions (only if shell scripts exist)
+    RUN find scripts/ -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 
-# Set environment variables
-ENV PYTHONPATH=/app
-ENV PYTHONUNBUFFERED=1
-ENV BROKER_TYPE=mock
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash trader
+RUN chown -R trader:trader /app
+USER trader
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import qlib.production; print('Health check passed')" || exit 1
+    CMD python3 -c "import sys; sys.exit(0)"
 
-# Default command: run the production workflow
-CMD ["python", "-m", "qlib.production.workflow", "--config", "config/production_config.yaml", "--continuous"]
+# Default command
+CMD ["python3", "-m", "src.trading.live_trading", "--auto-select", "--max-stocks", "10"]

@@ -43,3 +43,27 @@
 2025-07-03 01:22:20,259 - __main__ - INFO - Selected stocks: MU, MSFT, QCOM, HES, META
 2025-07-03 01:22:20,260 - __main__ - INFO - Starting paper trading
 2025-07-03 01:22:20,261 - __main__ - INFO - Live trading started for symbols: ['MU', 'MSFT', 'QCOM', 'HES', 'META']
+2025-07-03 01:32:20,189 - __main__ - INFO - Live trading stopped
+2025-07-03 05:40:49,836 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-03 05:40:49,837 - src.trading.engine - INFO - Optimized Trading Engine initialized
+2025-07-03 05:40:49,837 - src.trading.stock_selector - INFO - Loaded 97 stocks for selection
+2025-07-03 05:40:49,837 - __main__ - INFO - Live Trading System initialized
+2025-07-03 05:40:49,838 - __main__ - INFO - Automatically selecting 10 best stocks...
+2025-07-03 05:40:49,838 - src.trading.stock_selector - INFO - Selecting best 10 stocks from 97 candidates
+2025-07-03 05:40:50,036 - src.trading.stock_selector - WARNING - HTTP 404 for ANTM
+2025-07-03 05:40:50,669 - src.trading.stock_selector - WARNING - HTTP 404 for SQ
+2025-07-03 05:40:52,247 - src.trading.stock_selector - WARNING - HTTP 404 for PXD
+2025-07-03 05:41:17,327 - src.trading.stock_selector - INFO - Selected 10 stocks:
+2025-07-03 05:41:17,328 - src.trading.stock_selector - INFO -   MU: 0.725 - Strong price momentum: 17.9%, Optimal volatility: 0.29, Stable recent volatility
+2025-07-03 05:41:17,328 - src.trading.stock_selector - INFO -   MSFT: 0.635 - Strong price momentum: 5.9%, Acceptable volatility: 0.12, Stable recent volatility
+2025-07-03 05:41:17,329 - src.trading.stock_selector - INFO -   QCOM: 0.620 - Strong price momentum: 8.9%, Optimal volatility: 0.24, Stable recent volatility
+2025-07-03 05:41:17,330 - src.trading.stock_selector - INFO -   HES: 0.610 - Strong price momentum: 7.5%, Optimal volatility: 0.21, Stable recent volatility
+2025-07-03 05:41:17,330 - src.trading.stock_selector - INFO -   META: 0.600 - Positive price momentum: 3.7%, Optimal volatility: 0.27, Stable recent volatility
+2025-07-03 05:41:17,330 - src.trading.stock_selector - INFO -   CSCO: 0.590 - Strong price momentum: 6.5%, Optimal volatility: 0.18, Stable recent volatility
+2025-07-03 05:41:17,330 - src.trading.stock_selector - INFO -   GOOG: 0.580 - Strong price momentum: 6.1%, Optimal volatility: 0.26, Above average volume: 1.3x
+2025-07-03 05:41:17,331 - src.trading.stock_selector - INFO -   COP: 0.580 - Strong price momentum: 9.9%, Optimal volatility: 0.32, Stable recent volatility
+2025-07-03 05:41:17,331 - src.trading.stock_selector - INFO -   GOOGL: 0.580 - Strong price momentum: 6.3%, Optimal volatility: 0.27, Above average volume: 1.3x
+2025-07-03 05:41:17,331 - src.trading.stock_selector - INFO -   SBUX: 0.580 - Strong price momentum: 6.9%, Optimal volatility: 0.27, Stable recent volatility
+2025-07-03 05:41:17,334 - __main__ - INFO - Selected stocks: MU, MSFT, QCOM, HES, META, CSCO, GOOG, COP, GOOGL, SBUX
+2025-07-03 05:41:17,337 - __main__ - INFO - Starting paper trading
+2025-07-03 05:41:17,340 - __main__ - INFO - Live trading started for symbols: ['MU', 'MSFT', 'QCOM', 'HES', 'META', 'CSCO', 'GOOG', 'COP', 'GOOGL', 'SBUX']
