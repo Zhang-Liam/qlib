@@ -712,6 +712,7 @@ class AlpacaConnector(BrokerConnector):
         try:
             from alpaca.trading.client import TradingClient
             from alpaca.data.historical import StockHistoricalDataClient
+            from alpaca.data.timeframe import TimeFrame
             
             # Create trading client
             self.trading_client = TradingClient(
@@ -942,11 +943,13 @@ class AlpacaConnector(BrokerConnector):
             interval_map = {
                 "1d": TimeFrame.Day,
                 "1h": TimeFrame.Hour,
-                "5min": TimeFrame.Minute(5),
-                "1min": TimeFrame.Minute(1)
+                "1min": TimeFrame.Minute
             }
             
             alpaca_timeframe = interval_map.get(interval, TimeFrame.Day)
+            
+            print("DEBUG: interval =", interval, "alpaca_timeframe =", alpaca_timeframe, type(alpaca_timeframe))
+            print("DEBUG: symbol =", symbol, "start_date =", start_date, "end_date =", end_date)
             
             request = StockBarsRequest(
                 symbol_or_symbols=symbol,
@@ -955,17 +958,43 @@ class AlpacaConnector(BrokerConnector):
                 end=end_date
             )
             
+            print("DEBUG: Request created, fetching bars...")
             bars = self.data_client.get_stock_bars(request)
+            print("DEBUG: Bars received:", type(bars), "keys:", list(bars.keys()) if hasattr(bars, 'keys') else "no keys")
             
             # Convert to DataFrame
-            if symbol in bars:
+            if hasattr(bars, 'keys') and symbol in bars:
                 df = bars[symbol].df
                 df.reset_index(inplace=True)
                 df.rename(columns={'timestamp': 'date'}, inplace=True)
                 return df
+            elif hasattr(bars, 'df'):
+                # Single symbol response
+                df = bars.df
+                df.reset_index(inplace=True)
+                df.rename(columns={'timestamp': 'date'}, inplace=True)
+                return df
             else:
-                raise ValueError(f"No historical data available for {symbol}")
-            
+                # Try to get any available data
+                print(f"DEBUG: No data for {symbol}, trying to get any available data...")
+                # Request data for the last 5 business days
+                from datetime import timedelta
+                recent_start = end_date - timedelta(days=5)
+                recent_request = StockBarsRequest(
+                    symbol_or_symbols=symbol,
+                    timeframe=alpaca_timeframe,
+                    start=recent_start,
+                    end=end_date
+                )
+                recent_bars = self.data_client.get_stock_bars(recent_request)
+                
+                if hasattr(recent_bars, 'keys') and symbol in recent_bars:
+                    df = recent_bars[symbol].df
+                    df.reset_index(inplace=True)
+                    df.rename(columns={'timestamp': 'date'}, inplace=True)
+                    return df
+                else:
+                    raise ValueError(f"No historical data available for {symbol} in the requested date range")
         except Exception as e:
             self.logger.error(f"Error getting historical data for {symbol}: {e}")
             raise

@@ -1,0 +1,69 @@
+# Automated Trading Configuration
+trading:
+  # Trading parameters
+  symbols: ["AAPL", "GOOGL", "MSFT", "SPY", "QQQ"]
+  max_position_size: 0.1  # 10% of portfolio per position
+  max_positions: 5
+  min_cash_reserve: 0.2  # Keep 20% cash reserve
+  
+  # Risk management
+  stop_loss_pct: 0.05  # 5% stop loss
+  take_profit_pct: 0.15  # 15% take profit
+  max_daily_loss: 0.02  # 2% max daily loss
+  
+  # Advanced risk controls
+  max_concentration: 0.2  # Max 20% in any single position
+  max_correlation: 0.7  # Max correlation between positions
+  volatility_threshold: 0.03  # 3% daily volatility threshold
+  drawdown_limit: 0.1  # 10% max drawdown
+  var_limit: 0.02  # 2% Value at Risk limit
+  
+  # Data and model settings
+  lookback_days: 30
+  prediction_horizon: 5  # days
+  confidence_threshold: 0.6  # minimum confidence to trade
+  
+  # Execution settings
+  order_type: "market"  # market, limit, stop
+  time_in_force: "day"
+  
+  # Trading schedule
+  trading_hours:
+    start: "09:30"  # Market open (ET)
+    end: "15:45"    # Market close (ET)
+
+# Risk management settings
+risk:
+  level: "moderate"  # conservative, moderate, aggressive
+  enable_stop_loss: true
+  enable_take_profit: true
+  enable_trailing_stop: false
+  trailing_stop_pct: 0.03  # 3% trailing stop
+  
+  # Position sizing
+  kelly_criterion: false  # Use Kelly criterion for position sizing
+  volatility_adjustment: true  # Adjust position size based on volatility
+  
+  # Market regime detection
+  regime_detection: true
+  high_volatility_reduction: 0.5  # Reduce position size by 50% in high volatility
+
+# Qlib workflow settings
+qlib:
+  model_name: "linear"  # or "lightgbm", "xgboost", etc.
+  dataset_name: "Alpha158"
+  market: "us"
+  
+# Broker settings
+broker:
+  type: "alpaca"
+  paper_trading: true
+  api_key: "${ALPACA_API_KEY}"
+  secret_key: "${ALPACA_SECRET_KEY}"
+  
+# Logging
+logging:
+  level: "INFO"
+  file: "trading.log"
+  max_size: "10MB"
+  backup_count: 5 

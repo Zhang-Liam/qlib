@@ -1,0 +1,42 @@
+2025-07-02 21:26:39,934 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-02 21:26:39,934 - automated_trading_engine - INFO - Automated Trading Engine initialized
+2025-07-02 21:26:40,502 - automated_trading_engine - INFO - Skipping Qlib model initialization for now
+2025-07-02 21:26:40,934 - automated_trading_engine - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:27:11,740 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-02 21:27:11,740 - __main__ - INFO - Automated Trading Engine initialized
+2025-07-02 21:27:11,740 - __main__ - INFO - Starting continuous trading with 5-minute intervals
+2025-07-02 21:27:11,784 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:32:11,790 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:37:11,789 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:39:31,551 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-02 21:39:31,551 - __main__ - INFO - Enhanced Trading Engine initialized
+2025-07-02 21:39:31,601 - __main__ - ERROR - Error in enhanced trading cycle: 'trading_hours'
+2025-07-02 21:39:50,873 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-02 21:39:50,873 - __main__ - INFO - Enhanced Trading Engine initialized
+2025-07-02 21:39:50,920 - __main__ - ERROR - Error in enhanced trading cycle: 'trading_hours'
+2025-07-02 21:42:11,794 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:43:43,422 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-02 21:43:43,422 - __main__ - INFO - Enhanced Trading Engine initialized
+2025-07-02 21:43:43,471 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:43:54,862 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-02 21:43:54,862 - __main__ - INFO - Enhanced Trading Engine initialized
+2025-07-02 21:43:54,862 - __main__ - INFO - Starting enhanced continuous trading with 5-minute intervals
+2025-07-02 21:43:54,907 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:48:54,912 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:51:41,392 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-02 21:51:41,392 - __main__ - INFO - Enhanced Trading Engine initialized
+2025-07-02 21:51:41,442 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:53:54,918 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 21:58:54,923 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:03:54,927 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:08:13,010 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-02 22:08:13,010 - __main__ - INFO - Optimized Trading Engine initialized
+2025-07-02 22:08:13,058 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:08:54,942 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:13:54,949 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:18:54,956 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:23:54,963 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:28:54,970 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:33:54,973 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:38:54,980 - __main__ - INFO - Market is closed, skipping trading cycle
+2025-07-02 22:43:54,963 - __main__ - INFO - Market is closed, skipping trading cycle

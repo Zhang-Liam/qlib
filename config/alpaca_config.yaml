@@ -1,13 +1,13 @@
 # Alpaca Configuration for Qlib Production Trading
 broker:
-  broker_type: "alpaca"
+  type: "alpaca"
+  api_key: "${ALPACA_API_KEY}"
+  secret_key: "${ALPACA_SECRET_KEY}"
+  paper_trading: true
+  alpaca_base_url: "https://paper-api.alpaca.markets"
   host: ""  # Not used for Alpaca
   port: 0   # Not used for Alpaca
   client_id: 1
-  api_key: "${ALPACA_API_KEY}"  # Set via environment variable
-  api_secret: "${ALPACA_SECRET_KEY}"  # Set via environment variable
-  paper_trading: true
-  alpaca_base_url: "https://paper-api.alpaca.markets"
 
 risk:
   max_position_size: 100000
@@ -26,6 +26,9 @@ data:
   cache_duration: 300
 
 trading:
+  trading_hours:
+    start: "09:30"
+    end: "16:00"
   default_order_type: "market"
   max_slippage: 0.001
   min_order_size: 100
@@ -35,6 +38,12 @@ trading:
   max_order_retries: 3
   symbols: ["AAPL", "GOOGL", "MSFT", "SPY", "QQQ"]
   enable_trading: false  # Set to true for live trading
+  max_position_size: 0.1         # 10% of account per position (as a fraction)
+  max_positions: 10              # Max number of open positions
+  min_cash_reserve: 0.1          # 10% of account kept in cash
+  max_daily_loss: 0.05           # 5% daily loss limit
+  stop_loss_pct: 0.05            # 5% stop loss
+  take_profit_pct: 0.1           # 10% take profit
 
 monitoring:
   alert_email: null
