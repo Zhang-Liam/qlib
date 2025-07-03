@@ -19,9 +19,21 @@ import os
 from pathlib import Path
 
 # Import existing components
-from .engine import AutomatedTradingEngine
-from .risk_manager import RiskManager, RiskLevel
-from .signals import OptimizedSignalGenerator, SignalType, SignalResult
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+try:
+    from src.trading.engine import AutomatedTradingEngine
+    from src.trading.risk_manager import RiskManager, RiskLevel
+    from src.trading.signals import OptimizedSignalGenerator, SignalType, SignalResult
+    from src.trading.stock_selector import AutomatedStockSelector
+except ImportError:
+    # Fallback for direct execution
+    from engine import AutomatedTradingEngine
+    from risk_manager import RiskManager, RiskLevel
+    from signals import OptimizedSignalGenerator, SignalType, SignalResult
+    from stock_selector import AutomatedStockSelector
 
 class TradingMode(Enum):
     """Trading modes for safety."""
@@ -109,6 +121,7 @@ class LiveTradingSystem:
         # Initialize components
         self.trading_engine = AutomatedTradingEngine(config_path)
         self.risk_manager = RiskManager(self.config)
+        self.stock_selector = AutomatedStockSelector()
         
         # Live trading state
         self.positions: Dict[str, LivePosition] = {}
@@ -477,6 +490,24 @@ class LiveTradingSystem:
             'market_open': self.trading_engine.is_market_open()
         }
     
+    async def select_best_stocks(self, max_stocks: int = 10) -> List[str]:
+        """Automatically select the best stocks for trading."""
+        self.logger.info(f"Automatically selecting {max_stocks} best stocks...")
+        
+        try:
+            selected_stocks = await self.stock_selector.select_best_stocks(max_stocks)
+            symbols = [stock.symbol for stock in selected_stocks]
+            
+            self.logger.info(f"Selected stocks: {', '.join(symbols)}")
+            return symbols
+            
+        except Exception as e:
+            self.logger.error(f"Failed to select stocks automatically: {e}")
+            # Fallback to default stocks
+            default_stocks = ["AAPL", "MSFT", "GOOGL", "TSLA", "NVDA"]
+            self.logger.info(f"Using default stocks: {', '.join(default_stocks)}")
+            return default_stocks
+    
     def get_performance_report(self) -> Dict[str, Any]:
         """Generate performance report."""
         account = self.trading_engine.get_account_info()
@@ -527,21 +558,54 @@ def main():
     """Main function for live trading."""
     import argparse
     
-    parser = argparse.ArgumentParser(description="Live Trading System")
+    parser = argparse.ArgumentParser(description="Live Trading System CLI")
+    parser.add_argument('--select-stocks', action='store_true', help='Select and print the best stocks for trading')
+    parser.add_argument('--auto-select', action='store_true', help='Automatically select stocks for live trading')
+    parser.add_argument('--max-stocks', type=int, default=10, help='Number of top stocks to select')
     parser.add_argument("--config", default="config/alpaca_config.yaml", help="Configuration file")
-    parser.add_argument("--symbols", nargs="+", default=["AAPL", "MSFT", "GOOGL"], help="Trading symbols")
+    parser.add_argument("--symbols", nargs="+", default=["AAPL", "MSFT", "GOOGL"], help="Trading symbols (used if not auto-selecting)")
     parser.add_argument("--interval", type=int, default=5, help="Trading interval in minutes")
     parser.add_argument("--live", action="store_true", help="Enable live trading (real money)")
     parser.add_argument("--emergency-stop", action="store_true", help="Activate emergency stop")
     
     args = parser.parse_args()
     
+    if args.select_stocks:
+        # Run stock selection only
+        selector = AutomatedStockSelector()
+        print("🔍 Selecting best stocks for trading...")
+        selected_stocks = asyncio.run(selector.select_best_stocks(max_stocks=args.max_stocks))
+        print(f"\n📊 Top {len(selected_stocks)} Stocks Selected:")
+        print("=" * 80)
+        for i, stock in enumerate(selected_stocks, 1):
+            print(f"{i:2d}. {stock.symbol:6s} | Score: {stock.total_score:.3f}")
+            print(f"     Momentum: {stock.momentum_score:.2f} | Volatility: {stock.volatility_score:.2f} | Volume: {stock.volume_score:.2f}")
+            print(f"     Technical: {stock.technical_score:.2f} | Fundamental: {stock.fundamental_score:.2f}")
+            print(f"     Reasons: {', '.join(stock.reasons[:3])}")
+            print()
+        exit(0)
+
     # Initialize live trading system
     live_system = LiveTradingSystem(args.config)
     
     if args.emergency_stop:
         live_system.activate_emergency_stop("Command line activation")
         return
+    
+    # Determine which symbols to trade
+    if args.auto_select:
+        print("🔍 Automatically selecting best stocks for trading...")
+        try:
+            selected_stocks = asyncio.run(live_system.select_best_stocks(args.max_stocks))
+            symbols = selected_stocks
+            print(f"✅ Selected {len(symbols)} stocks for trading: {', '.join(symbols)}")
+        except Exception as e:
+            print(f"❌ Failed to auto-select stocks: {e}")
+            print("🔄 Falling back to default symbols...")
+            symbols = args.symbols
+    else:
+        symbols = args.symbols
+        print(f"📊 Using manually specified symbols: {', '.join(symbols)}")
     
     if args.live:
         if not live_system.switch_to_live_trading():
@@ -550,7 +614,7 @@ def main():
     
     # Start trading
     try:
-        live_system.start_live_trading(args.symbols, args.interval)
+        live_system.start_live_trading(symbols, args.interval)
         
         # Keep running
         while True:

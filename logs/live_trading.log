@@ -18,3 +18,28 @@
 2025-07-03 00:49:24,317 - AlpacaConnector - ERROR - Error getting account info: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
 2025-07-03 00:49:24,317 - AlpacaConnector - ERROR - Error getting account info: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
 2025-07-03 00:49:24,319 - trading.live_trading - ERROR - Error in monitoring loop: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+2025-07-03 01:08:54,818 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-03 01:08:54,818 - trading.engine - INFO - Optimized Trading Engine initialized
+2025-07-03 01:09:11,410 - trading.stock_selector - INFO - Loaded 94 stocks for selection
+2025-07-03 01:09:11,411 - trading.live_trading - INFO - Live Trading System initialized
+2025-07-03 01:09:11,411 - trading.live_trading - INFO - Starting paper trading
+2025-07-03 01:09:11,413 - trading.live_trading - INFO - Live trading started for symbols: ['AAPL', 'MSFT', 'GOOGL', 'TSLA', 'NVDA']
+2025-07-03 01:14:11,500 - trading.live_trading - INFO - Live trading stopped
+2025-07-03 01:21:53,262 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-03 01:21:53,263 - src.trading.engine - INFO - Optimized Trading Engine initialized
+2025-07-03 01:21:53,263 - src.trading.stock_selector - INFO - Loaded 97 stocks for selection
+2025-07-03 01:21:53,263 - __main__ - INFO - Live Trading System initialized
+2025-07-03 01:21:53,263 - __main__ - INFO - Automatically selecting 5 best stocks...
+2025-07-03 01:21:53,263 - src.trading.stock_selector - INFO - Selecting best 5 stocks from 97 candidates
+2025-07-03 01:21:56,315 - src.trading.stock_selector - WARNING - HTTP 404 for SQ
+2025-07-03 01:21:56,444 - src.trading.stock_selector - WARNING - HTTP 404 for PXD
+2025-07-03 01:21:56,752 - src.trading.stock_selector - WARNING - HTTP 404 for ANTM
+2025-07-03 01:22:20,257 - src.trading.stock_selector - INFO - Selected 5 stocks:
+2025-07-03 01:22:20,258 - src.trading.stock_selector - INFO -   MU: 0.725 - Strong price momentum: 17.9%, Optimal volatility: 0.29, Stable recent volatility
+2025-07-03 01:22:20,258 - src.trading.stock_selector - INFO -   MSFT: 0.635 - Strong price momentum: 5.9%, Acceptable volatility: 0.12, Stable recent volatility
+2025-07-03 01:22:20,258 - src.trading.stock_selector - INFO -   QCOM: 0.620 - Strong price momentum: 8.9%, Optimal volatility: 0.24, Stable recent volatility
+2025-07-03 01:22:20,258 - src.trading.stock_selector - INFO -   HES: 0.610 - Strong price momentum: 7.5%, Optimal volatility: 0.21, Stable recent volatility
+2025-07-03 01:22:20,258 - src.trading.stock_selector - INFO -   META: 0.600 - Positive price momentum: 3.7%, Optimal volatility: 0.27, Stable recent volatility
+2025-07-03 01:22:20,259 - __main__ - INFO - Selected stocks: MU, MSFT, QCOM, HES, META
+2025-07-03 01:22:20,260 - __main__ - INFO - Starting paper trading
+2025-07-03 01:22:20,261 - __main__ - INFO - Live trading started for symbols: ['MU', 'MSFT', 'QCOM', 'HES', 'META']

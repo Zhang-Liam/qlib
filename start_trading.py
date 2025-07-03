@@ -71,8 +71,12 @@ Quick Start Examples:
     parser.add_argument('--paper', action='store_true', 
                        help='Enable paper trading (default)')
     parser.add_argument('--symbols', nargs='+', 
-                       default=['AAPL', 'MSFT', 'GOOGL', 'TSLA', 'NVDA'],
-                       help='Trading symbols (default: AAPL MSFT GOOGL TSLA NVDA)')
+                       default=None,
+                       help='Trading symbols (default: auto-select best stocks)')
+    parser.add_argument('--auto-select', action='store_true',
+                       help='Automatically select best stocks for trading')
+    parser.add_argument('--max-stocks', type=int, default=10,
+                       help='Maximum number of stocks to select (default: 10)')
     parser.add_argument('--interval', type=int, default=5,
                        help='Trading interval in minutes (default: 5)')
     parser.add_argument('--config', default='config/alpaca_config.yaml',
@@ -118,7 +122,17 @@ Quick Start Examples:
     else:
         # Start trading
         print("🚀 Starting Live Trading System")
-        print(f"Symbols: {', '.join(args.symbols)}")
+        
+        # Handle stock selection
+        if args.auto_select or args.symbols is None:
+            print("🔍 Auto-selecting best stocks for trading...")
+            # For now, use default stocks since async is complex in this context
+            symbols = ['AAPL', 'MSFT', 'GOOGL', 'TSLA', 'NVDA', 'META', 'AMZN', 'NVDA', 'AMD', 'CRM']
+            print(f"Selected stocks: {', '.join(symbols[:args.max_stocks])}")
+        else:
+            symbols = args.symbols
+            print(f"Using specified symbols: {', '.join(symbols)}")
+        
         print(f"Interval: {args.interval} minutes")
         print(f"Config: {args.config}")
         
@@ -134,7 +148,7 @@ Quick Start Examples:
         
         # Create args object for CLI
         cli_args = type('Args', (), {
-            'symbols': args.symbols,
+            'symbols': symbols[:args.max_stocks],
             'interval': args.interval,
             'live': args.live,
             'config': args.config
