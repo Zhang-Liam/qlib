@@ -1,0 +1,56 @@
+# Live Trading Configuration for Real Money Trading
+# ⚠️  WARNING: This configuration is for REAL MONEY trading ⚠️
+
+broker:
+  type: "alpaca"
+  api_key: "${ALPACA_LIVE_API_KEY}"
+  secret_key: "${ALPACA_LIVE_SECRET_KEY}"
+  paper_trading: false  # ⚠️  REAL MONEY TRADING
+  alpaca_base_url: "https://api.alpaca.markets"  # Live trading endpoint
+  host: ""
+  port: 0
+  client_id: 1
+
+risk:
+  max_position_size: 50000  # Conservative position size for live trading
+  max_daily_loss: 2000      # Conservative daily loss limit
+  max_sector_exposure: 0.2  # Reduced sector exposure
+  max_single_stock_exposure: 0.05  # 5% max per stock
+  max_leverage: 1.0
+  stop_loss_pct: 0.03       # Tighter stop loss (3%)
+  position_sizing_method: "kelly"
+
+data:
+  data_provider: "alpaca"
+  api_key: "${ALPACA_LIVE_API_KEY}"
+  base_url: "https://api.alpaca.markets"  # Live data endpoint
+  update_frequency: "1min"
+  cache_duration: 300
+
+trading:
+  trading_hours:
+    start: "09:30"
+    end: "16:00"
+  default_order_type: "market"
+  max_slippage: 0.001
+  min_order_size: 100
+  max_order_size: 5000      # Reduced for safety
+  execution_delay: 0.1
+  retry_failed_orders: true
+  max_order_retries: 3
+  symbols: ["AAPL", "MSFT", "GOOGL"]  # Start with fewer symbols
+  enable_trading: true      # ⚠️  ENABLED FOR LIVE TRADING
+  max_position_size: 0.05   # 5% max per position (conservative)
+  max_positions: 5          # Fewer positions for safety
+  min_cash_reserve: 0.3     # 30% cash reserve (conservative)
+  max_daily_loss: 0.02      # 2% daily loss limit (conservative)
+  stop_loss_pct: 0.03       # 3% stop loss
+  take_profit_pct: 0.06     # 6% take profit
+
+monitoring:
+  alert_email: null
+  slack_webhook: null
+  log_level: "INFO"
+  performance_metrics: true
+  risk_alerts: true
+  trade_logging: true 

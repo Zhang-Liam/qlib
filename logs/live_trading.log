@@ -1,0 +1,20 @@
+2025-07-03 00:28:36,469 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-03 00:28:36,469 - trading.engine - INFO - Optimized Trading Engine initialized
+2025-07-03 00:28:36,469 - trading.live_trading - INFO - Live Trading System initialized
+2025-07-03 00:28:36,469 - trading.live_trading - INFO - Starting paper trading
+2025-07-03 00:28:36,470 - trading.live_trading - INFO - Live trading started for symbols: ['AAPL', 'MSFT', 'GOOGL']
+2025-07-03 00:31:18,203 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-03 00:31:18,203 - trading.engine - INFO - Optimized Trading Engine initialized
+2025-07-03 00:31:18,203 - trading.live_trading - INFO - Live Trading System initialized
+2025-07-03 00:31:18,204 - trading.live_trading - INFO - Starting paper trading
+2025-07-03 00:31:18,204 - trading.live_trading - INFO - Live trading started for symbols: ['AAPL', 'MSFT', 'GOOGL']
+2025-07-03 00:34:13,654 - AlpacaConnector - INFO - Connected to Alpaca
+2025-07-03 00:34:13,654 - trading.engine - INFO - Optimized Trading Engine initialized
+2025-07-03 00:34:13,654 - trading.live_trading - INFO - Live Trading System initialized
+2025-07-03 00:34:35,889 - trading.live_trading - WARNING - SWITCHING TO LIVE TRADING - REAL MONEY WILL BE USED
+2025-07-03 00:34:35,890 - trading.live_trading - INFO - Live trading activated. Account value: $100000.00
+2025-07-03 00:34:35,890 - trading.live_trading - WARNING - STARTING LIVE TRADING - REAL MONEY WILL BE USED
+2025-07-03 00:34:35,891 - trading.live_trading - INFO - Live trading started for symbols: ['AAPL', 'MSFT']
+2025-07-03 00:49:24,317 - AlpacaConnector - ERROR - Error getting account info: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+2025-07-03 00:49:24,317 - AlpacaConnector - ERROR - Error getting account info: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+2025-07-03 00:49:24,319 - trading.live_trading - ERROR - Error in monitoring loop: ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
